@@ -1,3 +1,7 @@
 # Ignore keys
 *.pem
 *.pk8
+
+## TEST Cases ##
+.android-certs
+## END TEST Cases ##
