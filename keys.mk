@@ -56,4 +56,14 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.google.pixel.vibrator.hal:com.google.pixel.vibrator.hal.certificate.override \
     com.qorvo.uwb:com.qorvo.uwb.certificate.override
 
+PRODUCT_CERTIFICATE_OVERRIDES += \
+    AdServicesApk:com.android.adservices.certificate.override \
+    HalfSheetUX:com.android.nearby.halfsheet.certificate.override \
+    OsuLogin:com.android.hotspot2.osulogin.certificate.override \
+    SafetyCenterResources:com.android.safetycenter.resources.certificate.override \
+    ServiceConnectivityResources:com.android.connectivity.resources.certificate.override \
+    ServiceUwbResources:com.android.uwb.resources.certificate.override \
+    ServiceWifiResources:com.android.wifi.resources.certificate.override \
+    WifiDialog:com.android.wifi.dialog.certificate.override
+
 PRODUCT_DEFAULT_DEV_CERTIFICATE := vendor/lineage-priv/keys/releasekey
