@@ -54,6 +54,13 @@ for apex in $(cat .data/apex_keys.txt); do
     echo "    ${apex}:${apex}.certificate.override \\" >> keys.mk
 done
 sed -i '$ s/ \\$//' keys.mk
+# Additional APEX certificate overrides
+echo "" >> keys.mk
+echo "PRODUCT_CERTIFICATE_OVERRIDES += \\" >> keys.mk
+for cert_override in $(cat .data/additional_apex_key_overrides.txt); do
+    echo "    ${cert_override} \\" >> keys.mk
+done
+sed -i '$ s/ \\$//' keys.mk
 # Apex APK certificates
 echo "" >> keys.mk
 echo "PRODUCT_CERTIFICATE_OVERRIDES += \\" >> keys.mk

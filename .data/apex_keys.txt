@@ -14,11 +14,7 @@ com.android.devicelock
 com.android.extservices
 com.android.federatedcompute
 com.android.graphics.pdf
-com.android.hardware.biometrics.face.virtual
-com.android.hardware.biometrics.fingerprint.virtual
-com.android.hardware.boot
-com.android.hardware.cas
-com.android.hardware.wifi
+com.android.hardware
 com.android.healthconnect.controller
 com.android.healthfitness
 com.android.health.connect.backuprestore
@@ -48,7 +44,7 @@ com.android.tzdata
 com.android.uwb
 com.android.uwb.resources
 com.android.virt
-com.android.vndk.current
+com.android.vndk
 com.android.wifi
 com.android.wifi.dialog
 com.android.wifi.resources
