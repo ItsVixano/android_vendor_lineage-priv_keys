@@ -15,13 +15,16 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.conscrypt:com.android.conscrypt.certificate.override \
     com.android.devicelock:com.android.devicelock.certificate.override \
     com.android.extservices:com.android.extservices.certificate.override \
+    com.android.federatedcompute:com.android.federatedcompute.certificate.override \
     com.android.graphics.pdf:com.android.graphics.pdf.certificate.override \
     com.android.hardware.biometrics.face.virtual:com.android.hardware.biometrics.face.virtual.certificate.override \
     com.android.hardware.biometrics.fingerprint.virtual:com.android.hardware.biometrics.fingerprint.virtual.certificate.override \
     com.android.hardware.boot:com.android.hardware.boot.certificate.override \
     com.android.hardware.cas:com.android.hardware.cas.certificate.override \
     com.android.hardware.wifi:com.android.hardware.wifi.certificate.override \
+    com.android.healthconnect.controller:com.android.healthconnect.controller.certificate.override \
     com.android.healthfitness:com.android.healthfitness.certificate.override \
+    com.android.health.connect.backuprestore:com.android.health.connect.backuprestore.certificate.override \
     com.android.hotspot2.osulogin:com.android.hotspot2.osulogin.certificate.override \
     com.android.i18n:com.android.i18n.certificate.override \
     com.android.ipsec:com.android.ipsec.certificate.override \
@@ -57,9 +60,13 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.qorvo.uwb:com.qorvo.uwb.certificate.override
 
 PRODUCT_CERTIFICATE_OVERRIDES += \
-    AdServicesApk:com.android.adservices.certificate.override \
+    AdServicesApk:com.android.adservices.api.certificate.override \
+    FederatedCompute:com.android.federatedcompute.certificate.override \
     HalfSheetUX:com.android.nearby.halfsheet.certificate.override \
+    HealthConnectBackupRestore:com.android.health.connect.backuprestore.certificate.override \
+    HealthConnectController:com.android.healthconnect.controller.certificate.override \
     OsuLogin:com.android.hotspot2.osulogin.certificate.override \
+    PdfViewer:com.android.graphics.pdf.certificate.override \
     SafetyCenterResources:com.android.safetycenter.resources.certificate.override \
     ServiceConnectivityResources:com.android.connectivity.resources.certificate.override \
     ServiceUwbResources:com.android.uwb.resources.certificate.override \

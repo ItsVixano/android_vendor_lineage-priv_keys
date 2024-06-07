@@ -12,13 +12,16 @@ com.android.connectivity.resources
 com.android.conscrypt
 com.android.devicelock
 com.android.extservices
+com.android.federatedcompute
 com.android.graphics.pdf
 com.android.hardware.biometrics.face.virtual
 com.android.hardware.biometrics.fingerprint.virtual
 com.android.hardware.boot
 com.android.hardware.cas
 com.android.hardware.wifi
+com.android.healthconnect.controller
 com.android.healthfitness
+com.android.health.connect.backuprestore
 com.android.hotspot2.osulogin
 com.android.i18n
 com.android.ipsec

@@ -1,6 +1,10 @@
-AdServicesApk:com.android.adservices.certificate.override
+AdServicesApk:com.android.adservices.api.certificate.override
+FederatedCompute:com.android.federatedcompute.certificate.override
 HalfSheetUX:com.android.nearby.halfsheet.certificate.override
+HealthConnectBackupRestore:com.android.health.connect.backuprestore.certificate.override
+HealthConnectController:com.android.healthconnect.controller.certificate.override
 OsuLogin:com.android.hotspot2.osulogin.certificate.override
+PdfViewer:com.android.graphics.pdf.certificate.override
 SafetyCenterResources:com.android.safetycenter.resources.certificate.override
 ServiceConnectivityResources:com.android.connectivity.resources.certificate.override
 ServiceUwbResources:com.android.uwb.resources.certificate.override
