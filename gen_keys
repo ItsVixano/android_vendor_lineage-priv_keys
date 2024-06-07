@@ -24,12 +24,14 @@ done
 # Apex keys
 for apex in $(cat .data/apex_keys.txt); do
     subject="/C=US/ST=California/L=Mountain View/O=Android/OU=Android/CN=${apex}/emailAddress=android@android.com"
-    key_apex="${certs_path}/${apex}.pem"
+    key_apex="$(pwd)/${apex}.pem"
     cert_file="$(pwd)/${apex}.certificate.override.x509.pem"
+    pubkey_file="$(pwd)/${apex}.avbpubkey"
     if [ ! -f ${key_apex} ]; then
         openssl genrsa -f4 4096 > ${key_apex}
     fi
     if ! openssl x509 -checkend 86400 -noout -in ${cert_file} &> /dev/null; then
+        avbtool extract_public_key --key ${key_apex} --output ${pubkey_file}
         openssl req -new -x509 ${hash} -key ${key_apex} -out ${cert_file} -days 10000 -subj "$subject"
         openssl pkcs8 -in ${key_apex} -topk8 -outform DER -out $(pwd)/${apex}.certificate.override.pk8 -nocrypt
     fi
