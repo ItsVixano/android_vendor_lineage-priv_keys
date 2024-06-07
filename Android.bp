@@ -81,28 +81,8 @@ android_app_certificate {
 }
 
 android_app_certificate {
-    name: "com.android.hardware.biometrics.face.virtual.certificate.override",
-    certificate: "com.android.hardware.biometrics.face.virtual.certificate.override",
-}
-
-android_app_certificate {
-    name: "com.android.hardware.biometrics.fingerprint.virtual.certificate.override",
-    certificate: "com.android.hardware.biometrics.fingerprint.virtual.certificate.override",
-}
-
-android_app_certificate {
-    name: "com.android.hardware.boot.certificate.override",
-    certificate: "com.android.hardware.boot.certificate.override",
-}
-
-android_app_certificate {
-    name: "com.android.hardware.cas.certificate.override",
-    certificate: "com.android.hardware.cas.certificate.override",
-}
-
-android_app_certificate {
-    name: "com.android.hardware.wifi.certificate.override",
-    certificate: "com.android.hardware.wifi.certificate.override",
+    name: "com.android.hardware.certificate.override",
+    certificate: "com.android.hardware.certificate.override",
 }
 
 android_app_certificate {
@@ -251,8 +231,8 @@ android_app_certificate {
 }
 
 android_app_certificate {
-    name: "com.android.vndk.current.certificate.override",
-    certificate: "com.android.vndk.current.certificate.override",
+    name: "com.android.vndk.certificate.override",
+    certificate: "com.android.vndk.certificate.override",
 }
 
 android_app_certificate {

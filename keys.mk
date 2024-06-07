@@ -17,11 +17,7 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.extservices:com.android.extservices.certificate.override \
     com.android.federatedcompute:com.android.federatedcompute.certificate.override \
     com.android.graphics.pdf:com.android.graphics.pdf.certificate.override \
-    com.android.hardware.biometrics.face.virtual:com.android.hardware.biometrics.face.virtual.certificate.override \
-    com.android.hardware.biometrics.fingerprint.virtual:com.android.hardware.biometrics.fingerprint.virtual.certificate.override \
-    com.android.hardware.boot:com.android.hardware.boot.certificate.override \
-    com.android.hardware.cas:com.android.hardware.cas.certificate.override \
-    com.android.hardware.wifi:com.android.hardware.wifi.certificate.override \
+    com.android.hardware:com.android.hardware.certificate.override \
     com.android.healthconnect.controller:com.android.healthconnect.controller.certificate.override \
     com.android.healthfitness:com.android.healthfitness.certificate.override \
     com.android.health.connect.backuprestore:com.android.health.connect.backuprestore.certificate.override \
@@ -51,7 +47,7 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.uwb:com.android.uwb.certificate.override \
     com.android.uwb.resources:com.android.uwb.resources.certificate.override \
     com.android.virt:com.android.virt.certificate.override \
-    com.android.vndk.current:com.android.vndk.current.certificate.override \
+    com.android.vndk:com.android.vndk.certificate.override \
     com.android.wifi:com.android.wifi.certificate.override \
     com.android.wifi.dialog:com.android.wifi.dialog.certificate.override \
     com.android.wifi.resources:com.android.wifi.resources.certificate.override \
@@ -72,5 +68,31 @@ PRODUCT_CERTIFICATE_OVERRIDES += \
     ServiceUwbResources:com.android.uwb.resources.certificate.override \
     ServiceWifiResources:com.android.wifi.resources.certificate.override \
     WifiDialog:com.android.wifi.dialog.certificate.override
+
+PRODUCT_CERTIFICATE_OVERRIDES += \
+    com.android.hardware.wifi:com.android.hardware.certificate.override \
+    com.android.hardware.power:com.android.hardware.certificate.override \
+    com.android.hardware.vibrator:com.android.hardware.certificate.override \
+    com.android.hardware.uwb:com.android.hardware.certificate.override \
+    com.android.hardware.sensors:com.android.hardware.certificate.override \
+    com.android.hardware.net.nlinterceptor:com.android.hardware.certificate.override \
+    com.android.hardware.threadnetwork:com.android.hardware.certificate.override \
+    com.android.hardware.contexthub:com.android.hardware.certificate.override \
+    com.android.hardware.biometrics.face.virtual:com.android.hardware.certificate.override \
+    com.android.hardware.cas:com.android.hardware.certificate.override \
+    com.android.hardware.thermal:com.android.hardware.certificate.override \
+    com.android.hardware.usb:com.android.hardware.certificate.override \
+    com.android.hardware.tetheroffload:com.android.hardware.certificate.override \
+    com.android.hardware.authsecret:com.android.hardware.certificate.override \
+    com.android.hardware.secure_element:com.android.hardware.certificate.override \
+    com.android.hardware.security.secretkeeper:com.android.hardware.certificate.override \
+    com.android.hardware.input.processor:com.android.hardware.certificate.override \
+    com.android.hardware.memtrack:com.android.hardware.certificate.override \
+    com.android.hardware.dumpstate:com.android.hardware.certificate.override \
+    com.android.hardware.boot:com.android.hardware.certificate.override \
+    com.android.hardware.gnss:com.android.hardware.certificate.override \
+    com.android.hardware.security.authgraph:com.android.hardware.certificate.override \
+    com.android.hardware.rebootescrow:com.android.hardware.certificate.override \
+    com.android.hardware.biometrics.fingerprint.virtual:com.android.hardware.certificate.override
 
 PRODUCT_DEFAULT_DEV_CERTIFICATE := vendor/lineage-priv/keys/releasekey
