@@ -3,6 +3,8 @@ filegroup(
     srcs = glob([
         "*.pk8",
         "*.pem",
+        "*.avbpubkey",
+        "*.pubkey",
     ]),
     visibility = ["//visibility:public"],
 )

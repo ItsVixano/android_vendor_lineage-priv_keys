@@ -12,9 +12,11 @@ subject="/C=US/ST=California/L=Mountain View/O=Android/OU=Android/CN=Android/ema
 for cert in $(cat .data/cert_keys.txt); do
     key_platform="${certs_path}/${cert}.pem"
     cert_file="$(pwd)/${cert}.x509.pem"
+    # Platform keys
     if [ ! -f ${key_platform} ]; then
         openssl genrsa -f4 4096 > ${key_platform}
     fi
+    # Certificates
     if ! openssl x509 -checkend 86400 -noout -in ${cert_file} &> /dev/null; then
         openssl req -new -x509 ${hash} -key ${key_platform} -out ${cert_file} -days 10000 -subj "$subject"
         openssl pkcs8 -in ${key_platform} -topk8 -outform DER -out $(pwd)/${cert}.pk8 -nocrypt
@@ -24,11 +26,23 @@ done
 # Apex keys
 for apex in $(cat .data/apex_keys.txt); do
     subject="/C=US/ST=California/L=Mountain View/O=Android/OU=Android/CN=${apex}/emailAddress=android@android.com"
-    key_apex="${certs_path}/${apex}.pem"
+    key_apex="$(pwd)/${apex}.pem"
     cert_file="$(pwd)/${apex}.certificate.override.x509.pem"
+    avbpubkey_file="$(pwd)/${apex}.avbpubkey"
+    pubkey_file="$(pwd)/${apex}.pubkey"
+    # Apex keys
     if [ ! -f ${key_apex} ]; then
         openssl genrsa -f4 4096 > ${key_apex}
     fi
+    # AVB Keys
+    if [ ! -f ${avbpubkey_file} ] && [ ! -f ${pubkey_file} ]; then
+        if [ ${apex} == "com.android.vndk" ]; then
+            avbtool extract_public_key --key ${key_apex} --output ${pubkey_file}
+        else
+            avbtool extract_public_key --key ${key_apex} --output ${avbpubkey_file}
+        fi
+    fi
+    # Certificates
     if ! openssl x509 -checkend 86400 -noout -in ${cert_file} &> /dev/null; then
         openssl req -new -x509 ${hash} -key ${key_apex} -out ${cert_file} -days 10000 -subj "$subject"
         openssl pkcs8 -in ${key_apex} -topk8 -outform DER -out $(pwd)/${apex}.certificate.override.pk8 -nocrypt
