@@ -71,6 +71,11 @@ android_app_certificate {
 }
 
 android_app_certificate {
+    name: "com.android.federatedcompute.certificate.override",
+    certificate: "com.android.federatedcompute.certificate.override",
+}
+
+android_app_certificate {
     name: "com.android.graphics.pdf.certificate.override",
     certificate: "com.android.graphics.pdf.certificate.override",
 }
@@ -101,8 +106,18 @@ android_app_certificate {
 }
 
 android_app_certificate {
+    name: "com.android.healthconnect.controller.certificate.override",
+    certificate: "com.android.healthconnect.controller.certificate.override",
+}
+
+android_app_certificate {
     name: "com.android.healthfitness.certificate.override",
     certificate: "com.android.healthfitness.certificate.override",
+}
+
+android_app_certificate {
+    name: "com.android.health.connect.backuprestore.certificate.override",
+    certificate: "com.android.health.connect.backuprestore.certificate.override",
 }
 
 android_app_certificate {
