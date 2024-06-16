@@ -18,9 +18,9 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.federatedcompute:com.android.federatedcompute.certificate.override \
     com.android.graphics.pdf:com.android.graphics.pdf.certificate.override \
     com.android.hardware:com.android.hardware.certificate.override \
+    com.android.health.connect.backuprestore:com.android.health.connect.backuprestore.certificate.override \
     com.android.healthconnect.controller:com.android.healthconnect.controller.certificate.override \
     com.android.healthfitness:com.android.healthfitness.certificate.override \
-    com.android.health.connect.backuprestore:com.android.health.connect.backuprestore.certificate.override \
     com.android.hotspot2.osulogin:com.android.hotspot2.osulogin.certificate.override \
     com.android.i18n:com.android.i18n.certificate.override \
     com.android.ipsec:com.android.ipsec.certificate.override \
@@ -30,6 +30,7 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.nearby.halfsheet:com.android.nearby.halfsheet.certificate.override \
     com.android.networkstack.tethering:com.android.networkstack.tethering.certificate.override \
     com.android.neuralnetworks:com.android.neuralnetworks.certificate.override \
+    com.android.nfcservices:com.android.nfcservices.certificate.override \
     com.android.ondevicepersonalization:com.android.ondevicepersonalization.certificate.override \
     com.android.os.statsd:com.android.os.statsd.certificate.override \
     com.android.permission:com.android.permission.certificate.override \

@@ -86,6 +86,11 @@ android_app_certificate {
 }
 
 android_app_certificate {
+    name: "com.android.health.connect.backuprestore.certificate.override",
+    certificate: "com.android.health.connect.backuprestore.certificate.override",
+}
+
+android_app_certificate {
     name: "com.android.healthconnect.controller.certificate.override",
     certificate: "com.android.healthconnect.controller.certificate.override",
 }
@@ -93,11 +98,6 @@ android_app_certificate {
 android_app_certificate {
     name: "com.android.healthfitness.certificate.override",
     certificate: "com.android.healthfitness.certificate.override",
-}
-
-android_app_certificate {
-    name: "com.android.health.connect.backuprestore.certificate.override",
-    certificate: "com.android.health.connect.backuprestore.certificate.override",
 }
 
 android_app_certificate {
@@ -143,6 +143,11 @@ android_app_certificate {
 android_app_certificate {
     name: "com.android.neuralnetworks.certificate.override",
     certificate: "com.android.neuralnetworks.certificate.override",
+}
+
+android_app_certificate {
+    name: "com.android.nfcservices.certificate.override",
+    certificate: "com.android.nfcservices.certificate.override",
 }
 
 android_app_certificate {

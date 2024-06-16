@@ -15,9 +15,9 @@ com.android.extservices
 com.android.federatedcompute
 com.android.graphics.pdf
 com.android.hardware
+com.android.health.connect.backuprestore
 com.android.healthconnect.controller
 com.android.healthfitness
-com.android.health.connect.backuprestore
 com.android.hotspot2.osulogin
 com.android.i18n
 com.android.ipsec
@@ -27,6 +27,7 @@ com.android.media.swcodec
 com.android.nearby.halfsheet
 com.android.networkstack.tethering
 com.android.neuralnetworks
+com.android.nfcservices
 com.android.ondevicepersonalization
 com.android.os.statsd
 com.android.permission
