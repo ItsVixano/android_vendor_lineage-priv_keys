@@ -95,4 +95,8 @@ PRODUCT_CERTIFICATE_OVERRIDES += \
     ServiceWifiResources:com.android.wifi.resources.certificate.override \
     WifiDialog:com.android.wifi.dialog.certificate.override
 
+PRODUCT_CERTIFICATE_OVERRIDES += \
+    CtsCarrierApiTargetPrepApp:cts_uicc_2021.certificate.override \
+    CtsCarrierApiTestCases:cts_uicc_2021.certificate.override
+
 PRODUCT_DEFAULT_DEV_CERTIFICATE := vendor/lineage-priv/keys/releasekey

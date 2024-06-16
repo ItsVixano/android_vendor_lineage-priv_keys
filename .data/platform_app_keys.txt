@@ -1,0 +1,2 @@
+CtsCarrierApiTargetPrepApp:cts_uicc_2021.certificate.override
+CtsCarrierApiTestCases:cts_uicc_2021.certificate.override
