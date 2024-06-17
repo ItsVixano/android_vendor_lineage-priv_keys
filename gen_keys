@@ -100,3 +100,5 @@ generate_overrides_mk .data/platform_app_keys.txt
 # Platform signature
 echo "" >> keys.mk
 echo "PRODUCT_DEFAULT_DEV_CERTIFICATE := vendor/lineage-priv/keys/releasekey" >> keys.mk
+echo "PRODUCT_OTA_PUBLIC_KEYS := vendor/lineage-priv/keys/releasekey.x509.pem" >> keys.mk
+echo "PRODUCT_EXTRA_RECOVERY_KEYS += vendor/lineage-priv/keys/releasekey" >> keys.mk
