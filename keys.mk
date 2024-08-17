@@ -57,6 +57,7 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.qorvo.uwb:com.qorvo.uwb.certificate.override
 
 PRODUCT_CERTIFICATE_OVERRIDES += \
+    com.android.hardware.audio:com.android.hardware.certificate.override \
     com.android.hardware.authsecret:com.android.hardware.certificate.override \
     com.android.hardware.biometrics.face.virtual:com.android.hardware.certificate.override \
     com.android.hardware.biometrics.fingerprint.virtual:com.android.hardware.certificate.override \

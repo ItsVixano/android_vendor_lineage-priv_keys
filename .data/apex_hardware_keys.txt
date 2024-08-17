@@ -1,3 +1,4 @@
+com.android.hardware.audio:com.android.hardware.certificate.override
 com.android.hardware.authsecret:com.android.hardware.certificate.override
 com.android.hardware.biometrics.face.virtual:com.android.hardware.certificate.override
 com.android.hardware.biometrics.fingerprint.virtual:com.android.hardware.certificate.override
