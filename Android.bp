@@ -166,6 +166,11 @@ android_app_certificate {
 }
 
 android_app_certificate {
+    name: "com.android.profiling.certificate.override",
+    certificate: "com.android.profiling.certificate.override",
+}
+
+android_app_certificate {
     name: "com.android.resolv.certificate.override",
     certificate: "com.android.resolv.certificate.override",
 }

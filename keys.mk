@@ -34,6 +34,7 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.ondevicepersonalization:com.android.ondevicepersonalization.certificate.override \
     com.android.os.statsd:com.android.os.statsd.certificate.override \
     com.android.permission:com.android.permission.certificate.override \
+    com.android.profiling:com.android.profiling.certificate.override \
     com.android.resolv:com.android.resolv.certificate.override \
     com.android.rkpd:com.android.rkpd.certificate.override \
     com.android.runtime:com.android.runtime.certificate.override \
