@@ -5,6 +5,7 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.adservices:com.android.adservices.certificate.override \
     com.android.adservices.api:com.android.adservices.api.certificate.override \
     com.android.appsearch:com.android.appsearch.certificate.override \
+    com.android.appsearch.apk:com.android.appsearch.apk.certificate.override \
     com.android.art:com.android.art.certificate.override \
     com.android.bluetooth:com.android.bluetooth.certificate.override \
     com.android.btservices:com.android.btservices.certificate.override \

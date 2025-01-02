@@ -21,6 +21,11 @@ android_app_certificate {
 }
 
 android_app_certificate {
+    name: "com.android.appsearch.apk.certificate.override",
+    certificate: "com.android.appsearch.apk.certificate.override",
+}
+
+android_app_certificate {
     name: "com.android.art.certificate.override",
     certificate: "com.android.art.certificate.override",
 }
