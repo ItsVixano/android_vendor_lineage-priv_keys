@@ -1,5 +1,4 @@
 bluetooth
-cyngn-app
 media
 networkstack
 platform
