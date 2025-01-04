@@ -11,6 +11,7 @@ from OpenSSL import crypto
 
 from gen_keys_py import keys
 from gen_keys_py.avbtool import AvbTool
+from gen_keys_py.config import SUBJECTS_PARAMS
 
 # ENV
 CERTS_PATH = Path('~/.android-certs').expanduser()
@@ -31,25 +32,7 @@ def extract_public_key(key_apex_path: str, pubkey_output_path: str):
     tool.extract_public_key(args)
 
 
-def subject_params(param: str, custom_param: dict = None):
-    # Adapt this list based on https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ldap/distinguished-names.
-    defaults = {
-        'C': {1: 'US'},
-        'ST': {1: 'California'},
-        'L': {1: 'Mountain View'},
-        'O': {1: 'Android'},
-        'OU': {1: 'Android'},
-        'CN': {1: 'Android'},
-        'emailAddress': {1: 'android@android.com'},
-    }
-
-    if custom_param and param in custom_param:
-        defaults[param] = {1: custom_param[param]}
-
-    return defaults.get(param)
-
-
-def generate_single_platform_key(cert: str):
+def generate_platform_key(cert: str):
     key_platform = CERTS_PATH / f'{cert}.pem'
     x509_file = Path(f'{cert}.x509.pem')
     pk8_file = Path(f'{cert}.pk8')
@@ -64,13 +47,14 @@ def generate_single_platform_key(cert: str):
 
         # Generate x509_file
         cert_obj = crypto.X509()
-        cert_obj.get_subject().C = subject_params('C')[1]
-        cert_obj.get_subject().ST = subject_params('ST')[1]
-        cert_obj.get_subject().L = subject_params('L')[1]
-        cert_obj.get_subject().O = subject_params('O')[1]
-        cert_obj.get_subject().OU = subject_params('OU')[1]
-        cert_obj.get_subject().CN = subject_params('CN')[1]
-        cert_obj.get_subject().emailAddress = subject_params('emailAddress')[1]
+        subj = cert_obj.get_subject()
+        subj.C = SUBJECTS_PARAMS['C']
+        subj.ST = SUBJECTS_PARAMS['ST']
+        subj.L = SUBJECTS_PARAMS['L']
+        subj.O = SUBJECTS_PARAMS['O']
+        subj.OU = SUBJECTS_PARAMS['OU']
+        subj.CN = SUBJECTS_PARAMS['CN']
+        subj.emailAddress = SUBJECTS_PARAMS['emailAddress']
 
         cert_obj.set_serial_number(1)
         cert_obj.gmtime_adj_notBefore(0)
@@ -96,10 +80,8 @@ def generate_single_platform_key(cert: str):
 
         pk8_file.write_bytes(pk8_der)
 
-    return str(key_platform), str(x509_file), str(pk8_file)
 
-
-def generate_single_apex_key(apex: str):
+def generate_apex_key(apex: str):
     key_apex = Path(f'{apex}.pem')
     x509_file = Path(f'{apex}.certificate.override.x509.pem')
     pk8_file = Path(f'{apex}.certificate.override.pk8')
@@ -122,13 +104,14 @@ def generate_single_apex_key(apex: str):
 
         # Generate x509_file
         cert_obj = crypto.X509()
-        cert_obj.get_subject().C = subject_params('C')[1]
-        cert_obj.get_subject().ST = subject_params('ST')[1]
-        cert_obj.get_subject().L = subject_params('L')[1]
-        cert_obj.get_subject().O = subject_params('O')[1]
-        cert_obj.get_subject().OU = subject_params('OU')[1]
-        cert_obj.get_subject().CN = subject_params('CN', {'CN': apex})[1]
-        cert_obj.get_subject().emailAddress = subject_params('emailAddress')[1]
+        subj = cert_obj.get_subject()
+        subj.C = SUBJECTS_PARAMS['C']
+        subj.ST = SUBJECTS_PARAMS['ST']
+        subj.L = SUBJECTS_PARAMS['L']
+        subj.O = SUBJECTS_PARAMS['O']
+        subj.OU = SUBJECTS_PARAMS['OU']
+        subj.CN = apex
+        subj.emailAddress = SUBJECTS_PARAMS['emailAddress']
 
         cert_obj.set_serial_number(1)
         cert_obj.gmtime_adj_notBefore(0)
@@ -154,14 +137,6 @@ def generate_single_apex_key(apex: str):
 
         pk8_file.write_bytes(pk8_der)
 
-    return (
-        str(key_apex),
-        str(x509_file),
-        str(pk8_file),
-        str(avbpubkey_file),
-        str(pubkey_file),
-    )
-
 
 def generate_keys():
     workers = mp.cpu_count()
@@ -169,12 +144,11 @@ def generate_keys():
 
     with ProcessPoolExecutor(max_workers=workers) as executor:
         platform_futures = [
-            executor.submit(generate_single_platform_key, cert)
+            executor.submit(generate_platform_key, cert)
             for cert in keys.platform_keys
         ]
         apex_futures = [
-            executor.submit(generate_single_apex_key, apex)
-            for apex in keys.apex_keys
+            executor.submit(generate_apex_key, apex) for apex in keys.apex_keys
         ]
 
         platform_results = [future.result() for future in platform_futures]
@@ -183,7 +157,7 @@ def generate_keys():
     return platform_results, apex_results
 
 
-def generate_android_bp() -> None:
+def generate_android_bp():
     cert_blocks = '\n\n'.join(
         f'android_app_certificate {{\n'
         f'    name: "{apex}.certificate.override",\n'
@@ -196,7 +170,7 @@ def generate_android_bp() -> None:
     Path('Android.bp').write_text(content)
 
 
-def generate_makefile():
+def generate_keys_mk():
     mk_file = Path('keys.mk')
 
     sections = [
@@ -231,7 +205,7 @@ def generate_makefile():
 def main():
     generate_keys()
     generate_android_bp()
-    generate_makefile()
+    generate_keys_mk()
 
 
 main()

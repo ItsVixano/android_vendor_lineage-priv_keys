@@ -6,7 +6,7 @@ A cool template for signing LineageOS 20.0 > builds with `dev-keys`.
 
 1. Make sure you have [`pyOpenSSL`](https://pypi.org/project/pyOpenSSL/) installed on your machine.
 2. Clone this repo to `vendor/lineage-priv/keys` (on your synced ROM rootdir) and `cd` to it.
-3. Edit `subject_params` default vars on `gen_keys.py` script to reflect your data [[ref]](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ldap/distinguished-names).
+3. Edit `SUBJECTS_PARAMS` vars on `gen_keys_py/config.py` to reflect your data [[ref]](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ldap/distinguished-names).
 4. Run it:
 
 ```bash
