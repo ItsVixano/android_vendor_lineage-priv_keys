@@ -16,7 +16,7 @@ from gen_keys_py.config import SUBJECTS_PARAMS
 # ENV
 CERTS_PATH = Path('~/.android-certs').expanduser()
 # CERTS_PATH = Path('.android-certs')  # for testing only
-RSA_PLATFORM_KEY_SIZE = 4096  # 2048
+RSA_PLATFORM_KEY_SIZE = 2048
 RSA_APEX_KEY_SIZE = 4096
 
 
