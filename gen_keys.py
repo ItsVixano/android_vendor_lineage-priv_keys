@@ -37,13 +37,20 @@ def generate_platform_key(cert: str):
     x509_file = Path(f'{cert}.x509.pem')
     pk8_file = Path(f'{cert}.pk8')
 
-    if any(not path.exists() for path in [key_platform, x509_file, pk8_file]):
+    if not key_platform.exists():
         # Generate key_platform
         key = crypto.PKey()
         key.generate_key(crypto.TYPE_RSA, RSA_PLATFORM_KEY_SIZE)
         key_platform.write_bytes(
             crypto.dump_privatekey(crypto.FILETYPE_PEM, key)
         )
+
+    if any(not path.exists() for path in [x509_file, pk8_file]):
+        # Load key_platform
+        if 'key' not in locals():
+            key = crypto.load_privatekey(
+                crypto.FILETYPE_PEM, key_platform.read_bytes()
+            )
 
         # Generate x509_file
         cert_obj = crypto.X509()
@@ -88,13 +95,20 @@ def generate_apex_key(apex: str):
     avbpubkey_file = Path(f'{apex}.avbpubkey')
     pubkey_file = Path(f'{apex}.pubkey')
 
-    if any(not path.exists() for path in [key_apex, x509_file, pk8_file]) or (
-        not pubkey_file.exists() and not avbpubkey_file.exists()
-    ):
+    if not key_apex.exists():
         # Generate key_apex
         key = crypto.PKey()
         key.generate_key(crypto.TYPE_RSA, RSA_APEX_KEY_SIZE)
         key_apex.write_bytes(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
+
+    if any(not path.exists() for path in [x509_file, pk8_file]) or (
+        not pubkey_file.exists() and not avbpubkey_file.exists()
+    ):
+        # Load key_apex
+        if 'key' not in locals():
+            key = crypto.load_privatekey(
+                crypto.FILETYPE_PEM, key_apex.read_bytes()
+            )
 
         # Generate avbpubkey_file / pubkey_file
         if apex == 'com.android.vndk':
