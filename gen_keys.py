@@ -185,19 +185,21 @@ def generate_keys_mk():
         "",
         "PRODUCT_CERTIFICATE_OVERRIDES := \\",
         "\n".join(
-            f"    {key}:{key}.certificate.override{' \\' if i < len(keys.apex_keys)-1 else ''}"
+            f"    {key}:{key}.certificate.override"
+            + (" \\" if i < len(keys.apex_keys) - 1 else "")
             for i, key in enumerate(keys.apex_keys)
         ),
         "",
         "PRODUCT_CERTIFICATE_OVERRIDES += \\",
         "\n".join(
-            f"    {key}:com.android.hardware.certificate.override{' \\' if i < len(keys.apex_hardware_keys)-1 else ''}"
+            f"    {key}:com.android.hardware.certificate.override"
+            + (" \\" if i < len(keys.apex_hardware_keys) - 1 else "")
             for i, key in enumerate(keys.apex_hardware_keys)
         ),
         "",
         "PRODUCT_CERTIFICATE_OVERRIDES += \\",
         "\n".join(
-            f"    {key}{' \\' if i < len(keys.apex_app_keys)-1 else ''}"
+            f"    {key}" + (" \\" if i < len(keys.apex_app_keys) - 1 else "")
             for i, key in enumerate(keys.apex_app_keys)
         ),
         "",
