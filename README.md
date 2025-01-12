@@ -25,7 +25,7 @@ You can generate a public key which can be used to verify the authenticity of yo
 2. Run this command:
 
 ```bash
-$ openssl rsa -in ~/.android-certs/releasekey.pem -pubout -out lineageos_pubkey
+$ openssl rsa -in ~/.android-certs/releasekey.pem -RSAPublicKey_out -out lineageos_pubkey
 ```
 
 3. Push the changes to your fork.
