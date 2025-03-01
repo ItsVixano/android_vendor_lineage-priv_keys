@@ -1,7 +1,0 @@
-line-length = 80
-
-[lint]
-extend-select = ['A', 'FA100', 'FA102', 'I']
-
-[format]
-quote-style = 'single'
