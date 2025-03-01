@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Giovanni Ricca
+# SPDX-FileCopyrightText: Giovanni Ricca
 # SPDX-License-Identifier: Apache-2.0
 
 # List based on build/make/target/product/security

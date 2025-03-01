@@ -1,4 +1,4 @@
-# Copyright (C) 2025 Giovanni Ricca
+# SPDX-FileCopyrightText: Giovanni Ricca
 # SPDX-License-Identifier: Apache-2.0
 
 # Adapt this list based on https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ldap/distinguished-names.

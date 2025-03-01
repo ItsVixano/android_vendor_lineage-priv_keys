@@ -1,5 +1,5 @@
 #!/usr/bin/env -S PYTHONDONTWRITEBYTECODE=1 python3
-# Copyright (C) 2025 Giovanni Ricca
+# SPDX-FileCopyrightText: Giovanni Ricca
 # SPDX-License-Identifier: Apache-2.0
 
 import multiprocessing as mp
