@@ -20,7 +20,7 @@ RSA_PLATFORM_KEY_SIZE = 2048
 RSA_APEX_KEY_SIZE = 4096
 
 
-def extract_public_key(key_apex_path: str, pubkey_output_path: str):
+def extract_public_key(key_apex_path: Path, pubkey_output_path: Path):
     class Args:
         def __init__(self, key_path, output_path):
             self.key = key_path
@@ -37,6 +37,8 @@ def generate_platform_key(cert: str):
     x509_file = Path(f"{cert}.x509.pem")
     pk8_file = Path(f"{cert}.pk8")
 
+    key = None
+
     if not key_platform.exists():
         # Generate key_platform
         key = crypto.PKey()
@@ -45,7 +47,7 @@ def generate_platform_key(cert: str):
 
     if any(not path.exists() for path in [x509_file, pk8_file]):
         # Load key_platform
-        if "key" not in locals():
+        if key is None:
             key = crypto.load_privatekey(crypto.FILETYPE_PEM, key_platform.read_bytes())
 
         # Generate x509_file
@@ -89,6 +91,8 @@ def generate_apex_key(apex: str):
     avbpubkey_file = Path(f"{apex}.avbpubkey")
     pubkey_file = Path(f"{apex}.pubkey")
 
+    key = None
+
     if not key_apex.exists():
         # Generate key_apex
         key = crypto.PKey()
@@ -99,7 +103,7 @@ def generate_apex_key(apex: str):
         not pubkey_file.exists() and not avbpubkey_file.exists()
     ):
         # Load key_apex
-        if "key" not in locals():
+        if key is None:
             key = crypto.load_privatekey(crypto.FILETYPE_PEM, key_apex.read_bytes())
 
         # Generate avbpubkey_file / pubkey_file
