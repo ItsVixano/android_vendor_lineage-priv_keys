@@ -31,6 +31,11 @@ android_app_certificate {
 }
 
 android_app_certificate {
+    name: "com.android.bt.certificate.override",
+    certificate: "com.android.bt.certificate.override",
+}
+
+android_app_certificate {
     name: "com.android.bluetooth.certificate.override",
     certificate: "com.android.bluetooth.certificate.override",
 }
@@ -63,6 +68,11 @@ android_app_certificate {
 android_app_certificate {
     name: "com.android.conscrypt.certificate.override",
     certificate: "com.android.conscrypt.certificate.override",
+}
+
+android_app_certificate {
+    name: "com.android.crashrecovery.certificate.override",
+    certificate: "com.android.crashrecovery.certificate.override",
 }
 
 android_app_certificate {
@@ -228,6 +238,11 @@ android_app_certificate {
 android_app_certificate {
     name: "com.android.tzdata.certificate.override",
     certificate: "com.android.tzdata.certificate.override",
+}
+
+android_app_certificate {
+    name: "com.android.uprobestats.certificate.override",
+    certificate: "com.android.uprobestats.certificate.override",
 }
 
 android_app_certificate {

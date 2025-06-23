@@ -7,6 +7,7 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.appsearch:com.android.appsearch.certificate.override \
     com.android.appsearch.apk:com.android.appsearch.apk.certificate.override \
     com.android.art:com.android.art.certificate.override \
+    com.android.bt:com.android.bt.certificate.override \
     com.android.bluetooth:com.android.bluetooth.certificate.override \
     com.android.btservices:com.android.btservices.certificate.override \
     com.android.cellbroadcast:com.android.cellbroadcast.certificate.override \
@@ -14,6 +15,7 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.configinfrastructure:com.android.configinfrastructure.certificate.override \
     com.android.connectivity.resources:com.android.connectivity.resources.certificate.override \
     com.android.conscrypt:com.android.conscrypt.certificate.override \
+    com.android.crashrecovery:com.android.crashrecovery.certificate.override \
     com.android.devicelock:com.android.devicelock.certificate.override \
     com.android.extservices:com.android.extservices.certificate.override \
     com.android.federatedcompute:com.android.federatedcompute.certificate.override \
@@ -47,6 +49,7 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.telephonymodules:com.android.telephonymodules.certificate.override \
     com.android.tethering:com.android.tethering.certificate.override \
     com.android.tzdata:com.android.tzdata.certificate.override \
+    com.android.uprobestats:com.android.uprobestats.certificate.override \
     com.android.uwb:com.android.uwb.certificate.override \
     com.android.uwb.resources:com.android.uwb.resources.certificate.override \
     com.android.virt:com.android.virt.certificate.override \
@@ -67,6 +70,7 @@ PRODUCT_CERTIFICATE_OVERRIDES += \
     com.android.hardware.cas:com.android.hardware.certificate.override \
     com.android.hardware.contexthub:com.android.hardware.certificate.override \
     com.android.hardware.dumpstate:com.android.hardware.certificate.override \
+    com.android.hardware.gatekeeper:com.android.hardware.certificate.override \
     com.android.hardware.gnss:com.android.hardware.certificate.override \
     com.android.hardware.input.processor:com.android.hardware.certificate.override \
     com.android.hardware.memtrack:com.android.hardware.certificate.override \
