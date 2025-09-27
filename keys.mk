@@ -54,6 +54,7 @@ PRODUCT_CERTIFICATE_OVERRIDES := \
     com.android.uwb.resources:com.android.uwb.resources.certificate.override \
     com.android.virt:com.android.virt.certificate.override \
     com.android.vndk:com.android.vndk.certificate.override \
+    com.android.vndk.current:com.android.vndk.current.certificate.override \
     com.android.wifi:com.android.wifi.certificate.override \
     com.android.wifi.dialog:com.android.wifi.dialog.certificate.override \
     com.android.wifi.resources:com.android.wifi.resources.certificate.override \
@@ -75,6 +76,7 @@ PRODUCT_CERTIFICATE_OVERRIDES += \
     com.android.hardware.input.processor:com.android.hardware.certificate.override \
     com.android.hardware.memtrack:com.android.hardware.certificate.override \
     com.android.hardware.net.nlinterceptor:com.android.hardware.certificate.override \
+    com.android.hardware.neuralnetworks:com.android.hardware.certificate.override \
     com.android.hardware.power:com.android.hardware.certificate.override \
     com.android.hardware.rebootescrow:com.android.hardware.certificate.override \
     com.android.hardware.secure_element:com.android.hardware.certificate.override \

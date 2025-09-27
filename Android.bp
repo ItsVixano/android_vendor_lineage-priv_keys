@@ -266,6 +266,11 @@ android_app_certificate {
 }
 
 android_app_certificate {
+    name: "com.android.vndk.current.certificate.override",
+    certificate: "com.android.vndk.current.certificate.override",
+}
+
+android_app_certificate {
     name: "com.android.wifi.certificate.override",
     certificate: "com.android.wifi.certificate.override",
 }
