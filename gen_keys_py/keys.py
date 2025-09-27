@@ -74,6 +74,7 @@ apex_keys = [
     "com.android.wifi",
     "com.android.wifi.dialog",
     "com.android.wifi.resources",
+    "com.google.cf",  # Used to sign multiple apexes (according to cs.android.com)
     "com.google.pixel.camera.hal",  # Pixel specific apex
     "com.google.pixel.vibrator.hal",  # Pixel specific apex
     "com.qorvo.uwb",  # Pixel specific apex
@@ -108,6 +109,29 @@ apex_hardware_keys = [
     "com.android.hardware.uwb",
     "com.android.hardware.vibrator",
     "com.android.hardware.wifi",
+]
+
+# List of apexes that are signed with 'com.google.cf' (com.google.cf.certificate.override)
+apex_cf_keys = [
+    "com.android.hardware.keymint.rust_cf_remote",
+    "com.android.hardware.keymint.rust_cf_guest_trusty_nonsecure",
+    "com.android.hardware.keymint.rust_nonsecure",
+    "com.android.hardware.gatekeeper.cf_remote",
+    "com.android.hardware.gatekeeper.nonsecure",
+    "com.google.cf.input.config",
+    "com.google.cf.oemlock",
+    "com.google.cf.health",
+    "com.google.cf.health.storage",
+    "com.google.cf.vulkan",
+    "com.google.cf.light",
+    "com.google.cf.gralloc",
+    "com.google.cf.confirmationui",
+    "com.google.cf.nfc",
+    "com.google.cf.identity",
+    "com.google.cf.ir",
+    "com.google.cf.bt",
+    "com.google.cf.rild",
+    "com.google.cf.wifi",
 ]
 
 # List of apps that are signed with specific apex keys

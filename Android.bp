@@ -286,6 +286,11 @@ android_app_certificate {
 }
 
 android_app_certificate {
+    name: "com.google.cf.certificate.override",
+    certificate: "com.google.cf.certificate.override",
+}
+
+android_app_certificate {
     name: "com.google.pixel.camera.hal.certificate.override",
     certificate: "com.google.pixel.camera.hal.certificate.override",
 }
