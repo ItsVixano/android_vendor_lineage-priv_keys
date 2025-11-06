@@ -223,5 +223,5 @@ def main():
     generate_android_bp()
     generate_keys_mk()
 
-
-main()
+if __name__ == "__main__":
+    main()
