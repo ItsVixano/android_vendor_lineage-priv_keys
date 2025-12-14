@@ -226,6 +226,11 @@ android_app_certificate {
 }
 
 android_app_certificate {
+    name: "com.android.telephonycore.certificate.override",
+    certificate: "com.android.telephonycore.certificate.override",
+}
+
+android_app_certificate {
     name: "com.android.telephonymodules.certificate.override",
     certificate: "com.android.telephonymodules.certificate.override",
 }
