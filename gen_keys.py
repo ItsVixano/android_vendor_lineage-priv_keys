@@ -212,6 +212,7 @@ def generate_keys_mk():
         "",
         "PRODUCT_DEFAULT_DEV_CERTIFICATE := vendor/lineage-priv/keys/releasekey",
         "PRODUCT_EXTRA_RECOVERY_KEYS += vendor/lineage-priv/keys/signed",
+        "PRODUCT_MAINLINE_BLUETOOTH_SEPOLICY_DEV_CERTIFICATES := $(dir $(PRODUCT_DEFAULT_DEV_CERTIFICATE))",
         "",
     ]
 
