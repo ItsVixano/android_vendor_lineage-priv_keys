@@ -94,25 +94,25 @@ PRODUCT_CERTIFICATE_OVERRIDES += \
     com.android.hardware.wifi:com.android.hardware.certificate.override
 
 PRODUCT_CERTIFICATE_OVERRIDES += \
-    com.android.hardware.keymint.rust_cf_remote:com.android.hardware.certificate.override \
-    com.android.hardware.keymint.rust_cf_guest_trusty_nonsecure:com.android.hardware.certificate.override \
-    com.android.hardware.keymint.rust_nonsecure:com.android.hardware.certificate.override \
-    com.android.hardware.gatekeeper.cf_remote:com.android.hardware.certificate.override \
-    com.android.hardware.gatekeeper.nonsecure:com.android.hardware.certificate.override \
-    com.google.cf.input.config:com.android.hardware.certificate.override \
-    com.google.cf.oemlock:com.android.hardware.certificate.override \
-    com.google.cf.health:com.android.hardware.certificate.override \
-    com.google.cf.health.storage:com.android.hardware.certificate.override \
-    com.google.cf.vulkan:com.android.hardware.certificate.override \
-    com.google.cf.light:com.android.hardware.certificate.override \
-    com.google.cf.gralloc:com.android.hardware.certificate.override \
-    com.google.cf.confirmationui:com.android.hardware.certificate.override \
-    com.google.cf.nfc:com.android.hardware.certificate.override \
-    com.google.cf.identity:com.android.hardware.certificate.override \
-    com.google.cf.ir:com.android.hardware.certificate.override \
-    com.google.cf.bt:com.android.hardware.certificate.override \
-    com.google.cf.rild:com.android.hardware.certificate.override \
-    com.google.cf.wifi:com.android.hardware.certificate.override
+    com.android.hardware.keymint.rust_cf_remote:com.google.cf.certificate.override \
+    com.android.hardware.keymint.rust_cf_guest_trusty_nonsecure:com.google.cf.certificate.override \
+    com.android.hardware.keymint.rust_nonsecure:com.google.cf.certificate.override \
+    com.android.hardware.gatekeeper.cf_remote:com.google.cf.certificate.override \
+    com.android.hardware.gatekeeper.nonsecure:com.google.cf.certificate.override \
+    com.google.cf.input.config:com.google.cf.certificate.override \
+    com.google.cf.oemlock:com.google.cf.certificate.override \
+    com.google.cf.health:com.google.cf.certificate.override \
+    com.google.cf.health.storage:com.google.cf.certificate.override \
+    com.google.cf.vulkan:com.google.cf.certificate.override \
+    com.google.cf.light:com.google.cf.certificate.override \
+    com.google.cf.gralloc:com.google.cf.certificate.override \
+    com.google.cf.confirmationui:com.google.cf.certificate.override \
+    com.google.cf.nfc:com.google.cf.certificate.override \
+    com.google.cf.identity:com.google.cf.certificate.override \
+    com.google.cf.ir:com.google.cf.certificate.override \
+    com.google.cf.bt:com.google.cf.certificate.override \
+    com.google.cf.rild:com.google.cf.certificate.override \
+    com.google.cf.wifi:com.google.cf.certificate.override
 
 PRODUCT_CERTIFICATE_OVERRIDES += \
     AdServicesApk:com.android.adservices.api.certificate.override \

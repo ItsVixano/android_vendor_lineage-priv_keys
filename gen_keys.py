@@ -199,7 +199,7 @@ def generate_keys_mk():
         "",
         "PRODUCT_CERTIFICATE_OVERRIDES += \\",
         "\n".join(
-            f"    {key}:com.android.hardware.certificate.override"
+            f"    {key}:com.google.cf.certificate.override"
             + (" \\" if i < len(keys.apex_cf_keys) - 1 else "")
             for i, key in enumerate(keys.apex_cf_keys)
         ),
