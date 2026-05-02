@@ -3,10 +3,12 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import multiprocessing as mp
-from concurrent.futures import ProcessPoolExecutor
+from argparse import Namespace
+from concurrent.futures import Future, ProcessPoolExecutor
 from pathlib import Path
 
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.types import PrivateKeyTypes
 from OpenSSL import crypto
 
 from gen_keys_py import keys
@@ -14,169 +16,139 @@ from gen_keys_py.avbtool import AvbTool
 from gen_keys_py.config import SUBJECTS_PARAMS
 
 # ENV
-CERTS_PATH = Path('~/.android-certs').expanduser()
-# CERTS_PATH = Path('.android-certs')  # for testing only
-RSA_PLATFORM_KEY_SIZE = 2048
-RSA_APEX_KEY_SIZE = 4096
+CERTS_PATH: Path = Path('~/.android-certs').expanduser()
+# CERTS_PATH: Path = Path('.android-certs')  # for testing only
+RSA_PLATFORM_KEY_SIZE: int = 2048
+RSA_APEX_KEY_SIZE: int = 4096
+EXPIRATION_DATE: int = 10000 * 24 * 60 * 60  # 10000 days
 
 
-def extract_public_key(key_apex_path: Path, pubkey_output_path: Path):
-    class Args:
-        def __init__(self, key_path, output_path):
-            self.key = key_path
-            self.output = open(output_path, 'wb')
-
-    args = Args(key_apex_path, pubkey_output_path)
-
-    tool = AvbTool()
-    tool.extract_public_key(args)
-
-
-def generate_platform_key(cert: str):
-    key_platform = CERTS_PATH / f'{cert}.pem'
-    x509_file = Path(f'{cert}.x509.pem')
-    pk8_file = Path(f'{cert}.pk8')
-
-    key = None
-
-    if not key_platform.exists():
-        # Generate key_platform
-        key = crypto.PKey()
-        key.generate_key(crypto.TYPE_RSA, RSA_PLATFORM_KEY_SIZE)
-        key_platform.write_bytes(
-            crypto.dump_privatekey(crypto.FILETYPE_PEM, key)
+class GenKeys:
+    def __init__(
+        self, cert: str, pkey_size: int, is_apex: bool = False
+    ) -> None:
+        self.cert: str = cert
+        self.pkey: Path = CERTS_PATH / f'{cert}.pem'
+        self.pkey_size: int = pkey_size
+        self.is_apex: bool = is_apex
+        self.x509: Path = (
+            Path(f'{cert}.certificate.override.x509.pem')
+            if is_apex
+            else Path(f'{cert}.x509.pem')
         )
+        self.pk8: Path = (
+            Path(f'{cert}.certificate.override.pk8')
+            if is_apex
+            else Path(f'{cert}.pk8')
+        )
+        self.avbpubkey: Path = Path(f'{cert}.avbpubkey')
+        self.pubkey: Path = Path(f'{cert}.pubkey')
 
-    if any(not path.exists() for path in [x509_file, pk8_file]):
-        # Load key_platform
-        if key is None:
-            key = crypto.load_privatekey(
-                crypto.FILETYPE_PEM, key_platform.read_bytes()
+    def generate_pkey(self) -> crypto.PKey:
+        if self.pkey.exists():
+            # Load existing pkey
+            return crypto.load_privatekey(
+                type=crypto.FILETYPE_PEM, buffer=self.pkey.read_bytes()
             )
 
-        # Generate x509_file
-        cert_obj = crypto.X509()
-        subj = cert_obj.get_subject()
+        # Generate pkey
+        key: crypto.PKey = crypto.PKey()
+        key.generate_key(type=crypto.TYPE_RSA, bits=self.pkey_size)
+        self.pkey.write_bytes(
+            data=crypto.dump_privatekey(type=crypto.FILETYPE_PEM, pkey=key)
+        )
+
+        return key
+
+    def generate_certs(self, pkey: crypto.PKey) -> None:
+        if self.x509.exists() and self.pk8.exists():
+            return
+
+        # Create cert obj
+        cert_obj: crypto.X509 = crypto.X509()
+        subj: crypto.X509Name = cert_obj.get_subject()
         subj.C = SUBJECTS_PARAMS['C']
         subj.ST = SUBJECTS_PARAMS['ST']
         subj.L = SUBJECTS_PARAMS['L']
         subj.O = SUBJECTS_PARAMS['O']
         subj.OU = SUBJECTS_PARAMS['OU']
-        subj.CN = SUBJECTS_PARAMS['CN']
+        subj.CN = self.cert if self.is_apex else SUBJECTS_PARAMS['CN']
         subj.emailAddress = SUBJECTS_PARAMS['emailAddress']
 
-        cert_obj.set_serial_number(1)
-        cert_obj.gmtime_adj_notBefore(0)
-        cert_obj.gmtime_adj_notAfter(10000 * 24 * 60 * 60)  # 10000 days
-        cert_obj.set_issuer(cert_obj.get_subject())
-        cert_obj.set_pubkey(key)
-        cert_obj.sign(key, 'sha256')
+        cert_obj.set_serial_number(serial=1)
+        cert_obj.gmtime_adj_notBefore(amount=0)
+        cert_obj.gmtime_adj_notAfter(amount=EXPIRATION_DATE)
+        cert_obj.set_issuer(issuer=cert_obj.get_subject())
+        cert_obj.set_pubkey(pkey)
+        cert_obj.sign(pkey, digest='sha256')
 
-        x509_file.write_bytes(
-            crypto.dump_certificate(crypto.FILETYPE_PEM, cert_obj)
+        # Generate x509
+        x509_der: bytes = crypto.dump_certificate(
+            type=crypto.FILETYPE_PEM, cert=cert_obj
         )
 
-        # Generate pk8_file
-        pkey = serialization.load_pem_private_key(
-            crypto.dump_privatekey(crypto.FILETYPE_PEM, key), password=None
+        self.x509.write_bytes(data=x509_der)
+
+        # Generate pk8
+        pk8: PrivateKeyTypes = serialization.load_pem_private_key(
+            data=crypto.dump_privatekey(type=crypto.FILETYPE_PEM, pkey=pkey),
+            password=None,
         )
 
-        pk8_der = pkey.private_bytes(
+        pk8_der: bytes = pk8.private_bytes(
             encoding=serialization.Encoding.DER,
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=serialization.NoEncryption(),
         )
 
-        pk8_file.write_bytes(pk8_der)
+        self.pk8.write_bytes(data=pk8_der)
 
+    def generate_avbpubkey(self) -> None:
+        if self.pubkey.exists() or self.avbpubkey.exists():
+            return
 
-def generate_apex_key(apex: str):
-    key_apex = Path(f'{apex}.pem')
-    x509_file = Path(f'{apex}.certificate.override.x509.pem')
-    pk8_file = Path(f'{apex}.certificate.override.pk8')
-    avbpubkey_file = Path(f'{apex}.avbpubkey')
-    pubkey_file = Path(f'{apex}.pubkey')
+        output_path: Path = (
+            self.pubkey if self.cert == 'com.android.vndk' else self.avbpubkey
+        )
 
-    key = None
-
-    if not key_apex.exists():
-        # Generate key_apex
-        key = crypto.PKey()
-        key.generate_key(crypto.TYPE_RSA, RSA_APEX_KEY_SIZE)
-        key_apex.write_bytes(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
-
-    if any(not path.exists() for path in [x509_file, pk8_file]) or (
-        not pubkey_file.exists() and not avbpubkey_file.exists()
-    ):
-        # Load key_apex
-        if key is None:
-            key = crypto.load_privatekey(
-                crypto.FILETYPE_PEM, key_apex.read_bytes()
+        with output_path.open('wb') as output:
+            AvbTool().extract_public_key(
+                args=Namespace(key=self.pkey, output=output)
             )
 
-        # Generate avbpubkey_file / pubkey_file
-        if apex == 'com.android.vndk':
-            extract_public_key(key_apex, pubkey_file)
-        else:
-            extract_public_key(key_apex, avbpubkey_file)
 
-        # Generate x509_file
-        cert_obj = crypto.X509()
-        subj = cert_obj.get_subject()
-        subj.C = SUBJECTS_PARAMS['C']
-        subj.ST = SUBJECTS_PARAMS['ST']
-        subj.L = SUBJECTS_PARAMS['L']
-        subj.O = SUBJECTS_PARAMS['O']
-        subj.OU = SUBJECTS_PARAMS['OU']
-        subj.CN = apex
-        subj.emailAddress = SUBJECTS_PARAMS['emailAddress']
+def generate_key(cert: str, size: int, is_apex: bool = False) -> None:
+    key_cert: GenKeys = GenKeys(cert=cert, pkey_size=size, is_apex=is_apex)
 
-        cert_obj.set_serial_number(1)
-        cert_obj.gmtime_adj_notBefore(0)
-        cert_obj.gmtime_adj_notAfter(10000 * 24 * 60 * 60)  # 10000 days
-        cert_obj.set_issuer(cert_obj.get_subject())
-        cert_obj.set_pubkey(key)
-        cert_obj.sign(key, 'sha256')
+    # Generate base pkey (if needed)
+    key: crypto.PKey = key_cert.generate_pkey()
 
-        x509_file.write_bytes(
-            crypto.dump_certificate(crypto.FILETYPE_PEM, cert_obj)
-        )
+    # Generate x509 & pk8 (if needed)
+    key_cert.generate_certs(pkey=key)
 
-        # Generate pk8_file
-        pkey = serialization.load_pem_private_key(
-            crypto.dump_privatekey(crypto.FILETYPE_PEM, key), password=None
-        )
-
-        pk8_der = pkey.private_bytes(
-            encoding=serialization.Encoding.DER,
-            format=serialization.PrivateFormat.PKCS8,
-            encryption_algorithm=serialization.NoEncryption(),
-        )
-
-        pk8_file.write_bytes(pk8_der)
+    if is_apex:
+        # Generate (avb)pubkey (if needed)
+        key_cert.generate_avbpubkey()
 
 
-def generate_keys():
-    workers = mp.cpu_count()
+def generate_keys() -> None:
     CERTS_PATH.mkdir(parents=True, exist_ok=True)
 
-    with ProcessPoolExecutor(max_workers=workers) as executor:
-        platform_futures = [
-            executor.submit(generate_platform_key, cert)
+    with ProcessPoolExecutor(max_workers=mp.cpu_count()) as executor:
+        futures: list[Future[None]] = [
+            executor.submit(generate_key, cert, RSA_PLATFORM_KEY_SIZE)
             for cert in keys.platform_keys
+        ] + [
+            executor.submit(generate_key, apex, RSA_APEX_KEY_SIZE, True)
+            for apex in keys.apex_keys
         ]
-        apex_futures = [
-            executor.submit(generate_apex_key, apex) for apex in keys.apex_keys
-        ]
 
-        platform_results = [future.result() for future in platform_futures]
-        apex_results = [future.result() for future in apex_futures]
-
-    return platform_results, apex_results
+        for future in futures:
+            future.result()
 
 
-def generate_android_bp():
-    cert_blocks = '\n\n'.join(
+def generate_android_bp() -> None:
+    cert_blocks: str = '\n\n'.join(
         f'android_app_certificate {{\n'
         f'    name: "{apex}.certificate.override",\n'
         f'    certificate: "{apex}.certificate.override",\n'
@@ -184,42 +156,42 @@ def generate_android_bp():
         for apex in keys.apex_keys
     )
 
-    content = f'// DO NOT EDIT THIS FILE MANUALLY\n\n{cert_blocks}\n'
-    Path('Android.bp').write_text(content)
+    content: str = f'// DO NOT EDIT THIS FILE MANUALLY\n\n{cert_blocks}\n'
+    Path('Android.bp').write_text(data=content)
 
 
-def generate_keys_mk():
-    mk_file = Path('keys.mk')
+def generate_keys_mk() -> None:
+    def _mk_lines(entries: list[str]) -> str:
+        return ' \\\n'.join(f'    {e}' for e in entries)
 
-    sections = [
+    mk_file: Path = Path('keys.mk')
+
+    sections: list[str] = [
         '# DO NOT EDIT THIS FILE MANUALLY',
         '',
         'PRODUCT_CERTIFICATE_OVERRIDES := \\',
-        '\n'.join(
-            f'    {key}:{key}.certificate.override'
-            + (' \\' if i < len(keys.apex_keys) - 1 else '')
-            for i, key in enumerate(keys.apex_keys)
+        _mk_lines(
+            entries=[f'{k}:{k}.certificate.override' for k in keys.apex_keys]
         ),
         '',
         'PRODUCT_CERTIFICATE_OVERRIDES += \\',
-        '\n'.join(
-            f'    {key}:com.android.hardware.certificate.override'
-            + (' \\' if i < len(keys.apex_hardware_keys) - 1 else '')
-            for i, key in enumerate(keys.apex_hardware_keys)
+        _mk_lines(
+            entries=[
+                f'{k}:com.android.hardware.certificate.override'
+                for k in keys.apex_hardware_keys
+            ]
         ),
         '',
         'PRODUCT_CERTIFICATE_OVERRIDES += \\',
-        '\n'.join(
-            f'    {key}:com.google.cf.certificate.override'
-            + (' \\' if i < len(keys.apex_cf_keys) - 1 else '')
-            for i, key in enumerate(keys.apex_cf_keys)
+        _mk_lines(
+            entries=[
+                f'{k}:com.google.cf.certificate.override'
+                for k in keys.apex_cf_keys
+            ]
         ),
         '',
         'PRODUCT_CERTIFICATE_OVERRIDES += \\',
-        '\n'.join(
-            f'    {key}' + (' \\' if i < len(keys.apex_app_keys) - 1 else '')
-            for i, key in enumerate(keys.apex_app_keys)
-        ),
+        _mk_lines(entries=[f'{k}' for k in keys.apex_app_keys]),
         '',
         'PRODUCT_DEFAULT_DEV_CERTIFICATE := vendor/lineage-priv/keys/releasekey',
         'PRODUCT_EXTRA_RECOVERY_KEYS += vendor/lineage-priv/keys/signed',
@@ -227,10 +199,10 @@ def generate_keys_mk():
         '',
     ]
 
-    mk_file.write_text('\n'.join(sections))
+    mk_file.write_text(data='\n'.join(sections))
 
 
-def main():
+def main() -> None:
     generate_keys()
     generate_android_bp()
     generate_keys_mk()
