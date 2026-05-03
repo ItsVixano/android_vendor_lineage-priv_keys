@@ -103,13 +103,10 @@ class GenKeys:
         pk8.write_bytes(data=pk8_der)
 
     def generate_avbpubkey(self) -> None:
-        if not self.is_apex:
-            return
-
         avbpubkey: Path = Path(f'{self.cert}.avbpubkey')
         pubkey: Path = Path(f'{self.cert}.pubkey')
 
-        if pubkey.exists() or avbpubkey.exists():
+        if not self.is_apex or pubkey.exists() or avbpubkey.exists():
             return
 
         output_path: Path = (
