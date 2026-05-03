@@ -196,9 +196,15 @@ def generate_keys_mk() -> None:
 
 
 def main() -> None:
-    generate_keys()
-    generate_android_bp()
-    generate_keys_mk()
+    with ProcessPoolExecutor(max_workers=3) as executor:
+        futures: list[Future[None]] = [
+            executor.submit(generate_keys),
+            executor.submit(generate_android_bp),
+            executor.submit(generate_keys_mk),
+        ]
+
+        for future in futures:
+            future.result()
 
 
 if __name__ == '__main__':
