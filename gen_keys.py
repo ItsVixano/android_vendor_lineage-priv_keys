@@ -24,25 +24,10 @@ EXPIRATION_DATE: int = 10000 * 24 * 60 * 60  # 10000 days
 
 
 class GenKeys:
-    def __init__(
-        self, cert: str, pkey_size: int, is_apex: bool = False
-    ) -> None:
+    def __init__(self, cert: str) -> None:
         self.cert: str = cert
         self.pkey: Path = CERTS_PATH / f'{cert}.pem'
-        self.pkey_size: int = pkey_size
-        self.is_apex: bool = is_apex
-        self.x509: Path = (
-            Path(f'{cert}.certificate.override.x509.pem')
-            if is_apex
-            else Path(f'{cert}.x509.pem')
-        )
-        self.pk8: Path = (
-            Path(f'{cert}.certificate.override.pk8')
-            if is_apex
-            else Path(f'{cert}.pk8')
-        )
-        self.avbpubkey: Path = Path(f'{cert}.avbpubkey')
-        self.pubkey: Path = Path(f'{cert}.pubkey')
+        self.is_apex: bool = self.cert.startswith('com.')
 
     def generate_pkey(self) -> crypto.PKey:
         if self.pkey.exists():
@@ -51,9 +36,11 @@ class GenKeys:
                 type=crypto.FILETYPE_PEM, buffer=self.pkey.read_bytes()
             )
 
+        pkey_size = RSA_APEX_KEY_SIZE if self.is_apex else RSA_PLATFORM_KEY_SIZE
+
         # Generate pkey
         key: crypto.PKey = crypto.PKey()
-        key.generate_key(type=crypto.TYPE_RSA, bits=self.pkey_size)
+        key.generate_key(type=crypto.TYPE_RSA, bits=pkey_size)
         self.pkey.write_bytes(
             data=crypto.dump_privatekey(type=crypto.FILETYPE_PEM, pkey=key)
         )
@@ -61,7 +48,18 @@ class GenKeys:
         return key
 
     def generate_certs(self, pkey: crypto.PKey) -> None:
-        if self.x509.exists() and self.pk8.exists():
+        x509 = (
+            Path(f'{self.cert}.certificate.override.x509.pem')
+            if self.is_apex
+            else Path(f'{self.cert}.x509.pem')
+        )
+        pk8 = (
+            Path(f'{self.cert}.certificate.override.pk8')
+            if self.is_apex
+            else Path(f'{self.cert}.pk8')
+        )
+
+        if x509.exists() and pk8.exists():
             return
 
         # Create cert obj
@@ -87,31 +85,34 @@ class GenKeys:
             type=crypto.FILETYPE_PEM, cert=cert_obj
         )
 
-        self.x509.write_bytes(data=x509_der)
+        x509.write_bytes(data=x509_der)
 
         # Generate pk8
-        pk8: PrivateKeyTypes = serialization.load_pem_private_key(
+        pk8_dump: PrivateKeyTypes = serialization.load_pem_private_key(
             data=crypto.dump_privatekey(type=crypto.FILETYPE_PEM, pkey=pkey),
             password=None,
         )
 
-        pk8_der: bytes = pk8.private_bytes(
+        pk8_der: bytes = pk8_dump.private_bytes(
             encoding=serialization.Encoding.DER,
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=serialization.NoEncryption(),
         )
 
-        self.pk8.write_bytes(data=pk8_der)
+        pk8.write_bytes(data=pk8_der)
 
     def generate_avbpubkey(self) -> None:
         if not self.is_apex:
             return
 
-        if self.pubkey.exists() or self.avbpubkey.exists():
+        avbpubkey: Path = Path(f'{self.cert}.avbpubkey')
+        pubkey: Path = Path(f'{self.cert}.pubkey')
+
+        if pubkey.exists() or avbpubkey.exists():
             return
 
         output_path: Path = (
-            self.pubkey if self.cert == 'com.android.vndk' else self.avbpubkey
+            pubkey if self.cert == 'com.android.vndk' else avbpubkey
         )
 
         with output_path.open('wb') as output:
@@ -120,8 +121,8 @@ class GenKeys:
             )
 
 
-def generate_key(cert: str, size: int, is_apex: bool = False) -> None:
-    key_cert: GenKeys = GenKeys(cert=cert, pkey_size=size, is_apex=is_apex)
+def generate_key(cert: str) -> None:
+    key_cert: GenKeys = GenKeys(cert=cert)
 
     # Generate base pkey (if needed)
     key: crypto.PKey = key_cert.generate_pkey()
@@ -138,11 +139,10 @@ def generate_keys() -> None:
 
     with ProcessPoolExecutor(max_workers=mp.cpu_count()) as executor:
         futures: list[Future[None]] = [
-            executor.submit(generate_key, cert, RSA_PLATFORM_KEY_SIZE)
+            executor.submit(generate_key, cert=cert)
             for cert in keys.platform_keys
         ] + [
-            executor.submit(generate_key, apex, RSA_APEX_KEY_SIZE, True)
-            for apex in keys.apex_keys
+            executor.submit(generate_key, cert=apex) for apex in keys.apex_keys
         ]
 
         for future in futures:
