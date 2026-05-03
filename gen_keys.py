@@ -104,6 +104,9 @@ class GenKeys:
         self.pk8.write_bytes(data=pk8_der)
 
     def generate_avbpubkey(self) -> None:
+        if not self.is_apex:
+            return
+
         if self.pubkey.exists() or self.avbpubkey.exists():
             return
 
@@ -126,9 +129,8 @@ def generate_key(cert: str, size: int, is_apex: bool = False) -> None:
     # Generate x509 & pk8 (if needed)
     key_cert.generate_certs(pkey=key)
 
-    if is_apex:
-        # Generate (avb)pubkey (if needed)
-        key_cert.generate_avbpubkey()
+    # Generate (avb)pubkey (if needed)
+    key_cert.generate_avbpubkey()
 
 
 def generate_keys() -> None:
