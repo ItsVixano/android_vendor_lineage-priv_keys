@@ -16,12 +16,12 @@ from gen_keys_py import keys
 from gen_keys_py.avbtool import AvbTool
 from gen_keys_py.config import SUBJECTS_PARAMS
 
-# ENV
+# Variables
 CERTS_PATH: Path = Path('~/.android-certs').expanduser()
 # CERTS_PATH: Path = Path('.android-certs')  # for testing only
 RSA_PLATFORM_KEY_SIZE: int = 2048
 RSA_APEX_KEY_SIZE: int = 4096
-EXPIRATION_DATE: int = 10000 * 24 * 60 * 60  # 10000 days
+EXPIRATION_DATE: int = 10000 * 24 * 60 * 60  # 10000 days (in seconds)
 
 
 class GenKeys:
